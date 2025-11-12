@@ -8,17 +8,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 
-SECRET_KEY = 'klcyvu4opz%^3$z3yf+0@a2a%o6ivuw8%n&t$i_kx2=n8d))jz'
+SECRET_KEY = os.getenv('SECRET_KEY', 'klcyvu4opz%^3$z3yf+0@a2a%o6ivuw8%n&t$i_kx2=n8d))jz')
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'false').lower() in ('1', 'true', 'yes')
 
-HOST_IP = 'localhost'
+HOST_IP = os.getenv('HOST_IP', 'localhost')
 
-ALLOWED_HOSTS = [
-    "69.28.93.194",
-    '127.0.0.1', 'localhost',
-    '*'
-]
+default_hosts = ['127.0.0.1', 'localhost']
+render_host = os.getenv('RENDER_EXTERNAL_HOSTNAME')
+if render_host:
+    default_hosts.append(render_host)
+env_hosts = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host.strip()]
+ALLOWED_HOSTS = default_hosts + env_hosts
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -51,6 +52,7 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -147,10 +149,11 @@ USE_TZ = False
 
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CORS_ORIGIN_ALLOW_ALL = True  
 
