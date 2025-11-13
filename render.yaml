@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: proyectofinal-api
+    env: docker
+    autoDeploy: true
+    plan: free
+    # Dockerfile CMD starts the app; no startCommand needed
+    healthCheckPath: /
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: api.settings
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: SECRET_KEY
+        generateValue: true
+    # Set DATABASE_URL and any other secrets in Render dashboard
+

@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv
+venv/
+env/
+build/
+dist/
+.git/
+.gitmodules
+.gitignore
+.DS_Store
+node_modules/
+*.sqlite3
+staticfiles/
+Permisos Basicos del Sistema.xlsx
+
